@@ -1,0 +1,855 @@
+<!DOCTYPE html>
+<html lang="vi" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>NCKH | Ung dung IoT - Dieu hoa khong khi thong minh | CTUET</title>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+<link href="https://unpkg.com/aos@2.3.4/dist/aos.css" rel="stylesheet">
+<style>
+:root{--p:#0a4d8c;--pd:#062f5a;--pl:#1a6bb5;--a:#00a8e8;--as:#e8f6fc;--t:#1e293b;--tl:#64748b;--bg:#f1f5f9;--card:#fff;--border:#e2e8f0;--s:0 4px 24px rgba(10,77,140,.1);--radius:16px}
+[data-theme="dark"]{--p:#3b9eff;--pd:#0c1929;--pl:#1a6bb5;--a:#38bdf8;--as:#0f2744;--t:#e2e8f0;--tl:#94a3b8;--bg:#0b1220;--card:#111827;--border:#1e293b;--s:0 4px 24px rgba(0,0,0,.4)}
+*{margin:0;padding:0;box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{font-family:'Be Vietnam Pro',system-ui,sans-serif;background:var(--bg);color:var(--t);line-height:1.65;transition:background .3s,color .3s;overflow-x:hidden}
+.navbar{position:fixed;top:0;left:0;right:0;z-index:1000;background:rgba(255,255,255,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--border);transition:.3s}
+[data-theme="dark"] .navbar{background:rgba(11,18,32,.92)}
+.nav-inner{max-width:1200px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;padding:.7rem 1.5rem;gap:1rem}
+.nav-brand{display:flex;align-items:center;gap:.7rem;text-decoration:none;color:var(--t)}
+.nav-brand img{width:42px;height:42px;border-radius:50%;border:2px solid var(--p);object-fit:cover;background:#fff}
+.nav-brand span{font-weight:700;font-size:.95rem}
+.nav-links{display:flex;gap:.2rem;flex-wrap:wrap}
+.nav-links a{text-decoration:none;color:var(--tl);font-size:.82rem;font-weight:500;padding:.4rem .75rem;border-radius:8px;transition:.2s}
+.nav-links a:hover,.nav-links a.active{background:var(--as);color:var(--p)}
+.nav-actions{display:flex;align-items:center;gap:.5rem}
+.theme-btn,.menu-btn{width:40px;height:40px;border:1px solid var(--border);border-radius:10px;background:var(--card);cursor:pointer;font-size:1.1rem;display:flex;align-items:center;justify-content:center;color:var(--t)}
+.menu-btn{display:none}
+.hero{min-height:100vh;display:flex;align-items:center;justify-content:center;position:relative;overflow:hidden;background:linear-gradient(135deg,#062f5a 0%,#0a4d8c 45%,#0e7490 100%);color:#fff;padding:6rem 1.5rem 4rem}
+.hero-bg{position:absolute;inset:0;opacity:.18;background-image:radial-gradient(circle at 20% 50%,#00a8e8 0%,transparent 40%),radial-gradient(circle at 80% 20%,#38bdf8 0%,transparent 35%);animation:hp 8s ease-in-out infinite alternate}
+@keyframes hp{from{transform:scale(1)}to{transform:scale(1.08)}}
+.hero-grid{position:absolute;inset:0;background-image:linear-gradient(rgba(255,255,255,.04) 1px,transparent 1px),linear-gradient(90deg,rgba(255,255,255,.04) 1px,transparent 1px);background-size:48px 48px}
+.hero-content{position:relative;z-index:2;max-width:880px;text-align:center}
+.hero-badge{display:inline-block;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);padding:.4rem 1.15rem;border-radius:50px;font-size:.88rem;margin-bottom:1.4rem}
+.hero h1{font-size:clamp(1.5rem,4.2vw,2.6rem);font-weight:800;line-height:1.28;margin-bottom:1.1rem;text-shadow:0 2px 16px rgba(0,0,0,.2)}
+.hero-sub{font-size:clamp(.95rem,2vw,1.15rem);opacity:.92;max-width:620px;margin:0 auto 2rem;font-weight:300}
+.hero-btns{display:flex;gap:1rem;justify-content:center;flex-wrap:wrap}
+.btn{display:inline-flex;align-items:center;gap:.5rem;padding:.8rem 1.5rem;border-radius:12px;font-weight:600;font-size:.95rem;text-decoration:none;transition:.25s;border:none;cursor:pointer;font-family:inherit}
+.btn-primary{background:#fff;color:#062f5a}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.btn-outline{background:transparent;color:#fff;border:2px solid rgba(255,255,255,.5)}
+.btn-outline:hover{background:rgba(255,255,255,.12)}
+.hero-stats{display:flex;gap:2.2rem;justify-content:center;margin-top:3.2rem;flex-wrap:wrap}
+.stat-item{text-align:center}
+.stat-num{font-size:2.1rem;font-weight:800;display:block}
+.stat-label{font-size:.82rem;opacity:.8}
+.scroll-hint{position:absolute;bottom:1.4rem;left:50%;transform:translateX(-50%);color:rgba(255,255,255,.55);font-size:.8rem;animation:bn 2s infinite}
+@keyframes bn{0%,100%{transform:translateX(-50%) translateY(0)}50%{transform:translateX(-50%) translateY(8px)}}
+.container{max-width:1100px;margin:0 auto;padding:0 1.4rem}
+section{padding:4rem 0}
+.sec-head{text-align:center;margin-bottom:2.3rem}
+.sec-head .tag{display:inline-block;background:var(--as);color:var(--p);padding:.28rem .85rem;border-radius:50px;font-size:.78rem;font-weight:600;margin-bottom:.6rem}
+.sec-head h2{font-size:clamp(1.4rem,3vw,1.9rem);font-weight:800;margin-bottom:.4rem}
+.sec-head p{color:var(--tl);max-width:520px;margin:0 auto}
+.card{background:var(--card);border-radius:var(--radius);box-shadow:var(--s);border:1px solid var(--border);overflow:hidden;transition:transform .3s,box-shadow .3s}
+.card:hover{transform:translateY(-4px);box-shadow:0 12px 36px rgba(10,77,140,.14)}
+.intro-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:1.4rem}
+.intro-text{padding:1.6rem}
+.intro-text p{margin-bottom:.9rem;color:var(--tl)}
+.intro-text strong{color:var(--t)}
+.hl{background:var(--as);border-left:4px solid var(--a);padding:1rem 1.2rem;border-radius:0 10px 10px 0;margin-top:.9rem;color:var(--t)}
+.qr-card{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:.9rem;padding:1.8rem;background:linear-gradient(160deg,#062f5a,#1a6bb5);color:#fff;text-align:center}
+.qr-card img{width:150px;height:150px;border-radius:12px;background:#fff;padding:8px}
+.obj-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:1.1rem}
+.obj{padding:1.4rem;display:flex;gap:.9rem}
+.obj-icon{width:46px;height:46px;border-radius:12px;background:linear-gradient(135deg,var(--p),var(--a));color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.25rem;flex-shrink:0}
+.obj > div:last-child{
+    flex:1;
+}
+
+.obj h4{
+    font-size:1rem;
+    margin-bottom:.3rem;
+    text-align:center;
+}
+.obj p{font-size:.88rem;color:var(--tl)}
+.arch-flow{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:.5rem;margin-bottom:1.8rem;padding:1.4rem;background:var(--card);border-radius:var(--radius);border:1px solid var(--border)}
+.arch-node{padding:.7rem 1rem;border-radius:10px;font-weight:600;font-size:.85rem;text-align:center;min-width:95px;border:2px solid;transition:transform .2s}
+.arch-node:hover{transform:scale(1.05)}
+.arch-node small{display:block;font-weight:400;font-size:.72rem;margin-top:.15rem;opacity:.85}
+.n-sensor{background:#ecfdf5;border-color:#6ee7b7;color:#065f46}
+.n-esp{background:#eff6ff;border-color:#93c5fd;color:#1e40af}
+.n-plc{background:#eef2ff;border-color:#a5b4fc;color:#3730a3}
+.n-act{background:#fef3c7;border-color:#fcd34d;color:#92400e}
+.n-cloud{background:#fce7f3;border-color:#f9a8d4;color:#9d174d}
+.n-app{background:#f3e8ff;border-color:#d8b4fe;color:#6b21a8}
+.center-title{text-align:center;}
+[data-theme="dark"] .n-sensor{background:#064e3b;border-color:#34d399;color:#a7f3d0}
+[data-theme="dark"] .n-esp{background:#1e3a5f;border-color:#60a5fa;color:#bfdbfe}
+[data-theme="dark"] .n-plc{background:#312e81;border-color:#818cf8;color:#c7d2fe}
+[data-theme="dark"] .n-act{background:#78350f;border-color:#fbbf24;color:#fde68a}
+[data-theme="dark"] .n-cloud{background:#831843;border-color:#f472b6;color:#fbcfe8}
+[data-theme="dark"] .n-app{background:#4c1d95;border-color:#c084fc;color:#e9d5ff}
+.arch-arrow{color:var(--a);font-size:1.3rem;font-weight:700}
+.comp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:.9rem}
+.comp{text-align:center;padding:1.2rem .9rem;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);transition:.25s}
+.comp:hover{border-color:var(--a);transform:translateY(-3px)}
+.comp .emoji{font-size:1.8rem;margin-bottom:.4rem}
+.comp h4{font-size:.9rem}
+.comp p{font-size:.78rem;color:var(--tl)}
+.video-wrap{position:relative;border-radius:var(--radius);overflow:hidden;box-shadow:var(--s);border:1px solid var(--border);background:#000;aspect-ratio:16/9;max-width:860px;margin:0 auto}
+.video-placeholder{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:linear-gradient(135deg,#062f5a,#0a4d8c);color:#fff;gap:.9rem;padding:2rem;text-align:center}
+.video-placeholder .play{width:68px;height:68px;border-radius:50%;background:rgba(255,255,255,.2);border:3px solid #fff;display:flex;align-items:center;justify-content:center;font-size:1.6rem}
+.gallery{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:1.1rem}
+.gal-item{position:relative;border-radius:var(--radius);overflow:hidden;aspect-ratio:4/3;cursor:pointer;border:1px solid var(--border);background:var(--card)}
+.gal-item img{width:100%;height:100%;object-fit:cover;transition:transform .4s}
+.gal-item:hover img{transform:scale(1.08)}
+.gal-overlay{position:absolute;inset:0;background:linear-gradient(transparent 45%,rgba(0,0,0,.7));display:flex;align-items:flex-end;padding:1rem;opacity:0;transition:.3s;color:#fff;font-weight:600;font-size:.88rem}
+.gal-item:hover .gal-overlay{opacity:1}
+.gal-ph{display:flex;flex-direction:column;align-items:center;justify-content:center;height:100%;background:var(--as);color:var(--p);gap:.4rem;font-weight:600}
+.gal-ph span{font-size:2.2rem}
+.lightbox{display:none;position:fixed;inset:0;z-index:2000;background:rgba(0,0,0,.9);align-items:center;justify-content:center;padding:2rem}
+.lightbox.active{display:flex}
+.lightbox img{max-width:95%;max-height:88vh;border-radius:12px}
+.lightbox-close{position:absolute;top:1.2rem;right:1.2rem;width:42px;height:42px;border-radius:50%;background:rgba(255,255,255,.15);border:none;color:#fff;font-size:1.3rem;cursor:pointer}
+.timeline{position:relative;max-width:680px;margin:0 auto;padding-left:1.8rem}
+.timeline::before{content:'';position:absolute;left:6px;top:0;bottom:0;width:3px;background:linear-gradient(var(--a),var(--p));border-radius:2px}
+.tl-item{position:relative;padding:0 0 2rem 1.8rem}
+.tl-item::before{content:'';position:absolute;left:-1.85rem;top:.3rem;width:14px;height:14px;border-radius:50%;background:var(--a);border:3px solid var(--card);box-shadow:0 0 0 3px var(--a)}
+.tl-date{font-size:.8rem;font-weight:600;color:var(--a);margin-bottom:.25rem}
+.tl-item h4{font-size:1rem;margin-bottom:.25rem}
+.tl-item p{font-size:.88rem;color:var(--tl)}
+.tech-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:.9rem;margin-bottom:2.2rem}
+.tech{text-align:center;padding:1.2rem .8rem;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);transition:.25s}
+.tech:hover{border-color:var(--a);transform:translateY(-3px)}
+.tech .icon{font-size:1.8rem;margin-bottom:.4rem}
+.tech h4{font-size:.88rem}
+.results-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:1.1rem}
+.result{padding:1.4rem;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);border-top:4px solid var(--a)}
+.result h4{font-size:1rem;margin-bottom:.4rem}
+.result p{font-size:.88rem;color:var(--tl)}
+table{width:100%;border-collapse:collapse;background:var(--card);border-radius:var(--radius);overflow:hidden;box-shadow:var(--s);border:1px solid var(--border)}
+th,td{padding:.9rem 1.2rem;text-align:left;border-bottom:1px solid var(--border)}
+th{background:var(--p);color:#fff;font-weight:600;font-size:.88rem;width:38%}
+[data-theme="dark"] th{background:#1e3a5f}
+tr:nth-child(even) td{background:var(--as)}
+.team-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:1.1rem}
+.team-card{text-align:center;padding:1.6rem 1.2rem;background:var(--card);border-radius:var(--radius);border:1px solid var(--border);transition:.25s}
+.team-card:hover{transform:translateY(-4px);border-color:var(--a)}
+.avatar{width:76px;height:76px;border-radius:50%;background:linear-gradient(135deg,var(--p),var(--a));color:#fff;display:flex;align-items:center;justify-content:center;font-size:1.4rem;font-weight:700;margin:0 auto .9rem;overflow:hidden;border:3px solid var(--as);box-shadow:0 4px 14px rgba(10,77,140,.18)}.avatar img{width:100%;height:100%;object-fit:cover}
+.team-card h4{font-size:1rem;margin-bottom:.2rem}
+.team-card h4{font-size:1rem;margin-bottom:.2rem}
+.team-card .role{font-size:.82rem;color:var(--a);font-weight:500;margin-bottom:.35rem}
+.team-card p{font-size:.82rem;color:var(--tl)}
+.warning{background:#fffbeb;border:1px solid #fcd34d;border-radius:var(--radius);padding:1.2rem 1.4rem;display:flex;gap:1rem}
+[data-theme="dark"] .warning{background:#1c1508;border-color:#92400e}
+.warning h4{color:#92400e;margin-bottom:.25rem}
+[data-theme="dark"] .warning h4{color:#fbbf24}
+.warning ul{margin-left:1rem;color:#78350f;font-size:.9rem}
+[data-theme="dark"] .warning ul{color:#fde68a}
+footer{background:var(--pd);color:#fff;padding:2.8rem 1.4rem;text-align:center}
+footer h3{font-size:1.1rem;margin-bottom:.35rem}
+footer p{opacity:.8;font-size:.88rem;margin-bottom:.25rem}
+footer .copy{margin-top:1.3rem;padding-top:1.1rem;border-top:1px solid rgba(255,255,255,.15);font-size:.8rem;opacity:.6}
+@media(max-width:768px){
+.nav-links{display:none;position:absolute;top:100%;left:0;right:0;background:var(--card);flex-direction:column;padding:1rem;border-bottom:1px solid var(--border)}
+.nav-links.open{display:flex}
+.menu-btn{display:flex}
+.intro-grid{grid-template-columns:1fr}
+.arch-flow{flex-direction:column}
+.arch-arrow{transform:rotate(90deg)}
+}
+.architecture{
+
+    display:flex;
+    justify-content:center;
+    margin-top:60px;
+
+}
+
+.iot-svg{
+
+    width:100%;
+    max-width:1200px;
+
+}
+
+.node rect{
+
+    fill:rgba(255,255,255,.94);
+
+    stroke:#38bdf8;
+
+    stroke-width:3;
+
+    filter:url(#shadow);
+
+    transition:.35s;
+
+}
+
+.node:hover rect{
+
+    transform:translateY(-6px);
+
+    stroke:#60a5fa;
+
+}
+
+.node text{
+
+    text-anchor:middle;
+
+    font-size:22px;
+
+    font-weight:700;
+
+    fill:#1e293b;
+
+}
+
+.node .sub{
+
+    font-size:17px;
+
+    font-weight:500;
+
+    fill:#64748b;
+
+}
+
+.svg-line{
+
+    fill:none;
+
+    stroke:url(#lineBlue);
+
+    stroke-width:4;
+
+    stroke-linecap:round;
+
+    stroke-linejoin:round;
+    marker-start:url(#arrow);
+
+    marker-end:url(#arrow);
+
+    stroke-dasharray:12 8;
+
+    animation:dataMove 1.5s linear infinite;
+
+}
+.firebase rect{
+    fill:#FFF7E6;
+}
+
+.web rect{
+    fill:#E8F5FF;
+}
+
+.esp rect{
+    fill:#DCEEFF;
+}
+
+.sensor rect{
+    fill:#EAF8FF;
+}
+
+.plc rect{
+    fill:#F3ECFF;
+}
+
+.act rect{
+    fill:#E9FFF2;
+}
+
+@keyframes dataMove{
+
+    from{
+        stroke-dashoffset:20;
+    }
+
+    to{
+        stroke-dashoffset:0;
+    }
+
+}
+
+.esp rect{
+
+    fill:#dbeafe;
+
+}
+
+.sensor rect{
+
+    fill:#e0f2fe;
+
+}
+
+.plc rect{
+
+    fill:#ede9fe;
+
+}
+
+.act rect{
+
+    fill:#dcfce7;
+
+}
+</style>
+</head>
+<body>
+
+<nav class="navbar">
+<div class="nav-inner">
+<a href="#" class="nav-brand">
+<img src="Logo.png" alt="CTUET">
+<span>Trường Đại học Kỹ thuật - Công nghệ Cần Thơ</span>
+</a>
+<div class="nav-links" id="navLinks">
+<a href="#gioi-thieu">Giới thiệu</a>
+<a href="#muc-tieu">Mục tiêu</a>
+<a href="#kien-truc">Kiến trúc</a>
+<a href="#hinh-anh">Hình ảnh</a>
+<a href="#tien-do">Tiến độ</a>
+<a href="#ket-qua">Kết quả</a>
+<a href="#nhom">Nhóm</a>
+</div>
+<div class="nav-actions">
+<button class="theme-btn" id="themeBtn" title="Dark mode">🌙</button>
+<button class="menu-btn" id="menuBtn">☰</button>
+</div>
+</div>
+</nav>
+
+<section class="hero" id="top">
+<div class="hero-bg"></div>
+<div class="hero-grid"></div>
+<div class="hero-content" data-aos="fade-up">
+<div class="hero-badge">📡 Đề tài NCKH Sinh viên · 2025–2026</div>
+<h1>Ứng dụng IoT trong Giám sát &amp; Điều khiển<br>Hệ thống Điều hòa Không khí Thông minh</h1>
+<div class="hero-btns">
+<a href="#kien-truc" class="btn btn-primary">Xem kiến trúc hệ thống</a>
+<a href="#hinh-anh" class="btn btn-outline">▶ Xem hình ảnh</a>
+</div>
+<div class="hero-stats">
+<div class="stat-item"><span class="stat-num counting" data-target="7">0</span><span class="stat-label">Cảm biến</span></div>
+<div class="stat-item"><span class="stat-num counting" data-target="2">0</span><span class="stat-label">Bộ điều khiển</span></div>
+<div class="stat-item"><span class="stat-num counting" data-target="1">0</span><span class="stat-label">Nền tảng IoT</span></div>
+<!-- <div class="stat-item"><span class="stat-num counting" data-target="24">0</span><span class="stat-label">Volt DC</span></div> -->
+</div>
+</div>
+<div class="scroll-hint">▼ Cuộn xuống</div>
+</section>
+
+<main>
+<section id="gioi-thieu">
+<div class="container">
+<div class="sec-head" data-aos="fade-up"><div class="tag">TỔNG QUAN</div><h2>Giới thiệu đề tài</h2><p>Hệ thống điều hòa không khí thông minh ứng dụng IoT</p></div>
+<div class="intro-grid" data-aos="fade-up" data-aos-delay="80">
+<div class="card"><div class="intro-text">
+<p><strong>Hệ thống điều hòa không khí thông minh ứng dụng IoT </strong>là mô hình giám sát và điều khiển điều hòa từ xa sử dụng PLC kết hợp ESP32. Hệ thống thu thập dữ liệu từ các cảm biến, truyền lên nền tảng IoT để hiển thị theo thời gian thực trên ứng dụng Android. Đồng thời, hệ thống hỗ trợ theo dõi điện năng, đánh giá tình trạng hoạt động bằng Health Index (HI) và cảnh báo bảo trì, góp phần nâng cao hiệu quả vận hành.</p>
+<p>Đề tài xây dựng <strong>hệ thống điều hòa không khí thông minh</strong>  <strong>ứng dụng IoT</strong>, giám sát nhiệt độ, độ ẩm, chất lượng không khí, dòng điện và điều khiển từ xa qua App Android.</p>
+<!-- <div class="hl"><strong>Điểm nổi bật:</strong> ESP32 Gateway + PLC Xinje XD3-16T-E, Modbus RTU (RS485), Firebase Realtime DB, chế độ Manual / Auto.</div> -->
+</div></div>
+<div class="card qr-card">
+<img src="HVAC_qrcode.png" alt="QR Smart HVAC IoT">
+<h3>Quét mã QR</h3>
+<p style="opacity:.9;font-size:.88rem">Smart HVAC IoT · App điều khiển hệ thống</p>
+</div>
+</div>
+</div>
+</section>
+
+<section id="muc-tieu" style="background:var(--card)">
+<div class="container">
+<div class="sec-head" data-aos="fade-up"><div class="tag">MỤC TIÊU</div><h2>Mục tiêu nghiên cứu</h2></div>
+<div class="obj-grid">
+
+    <div class="card obj" data-aos="fade-up">
+        <div class="obj-icon">❄️</div>
+        <div>
+            <h4>Nghiên cứu hệ thống điều hòa không khí</h4>
+            <p>Nghiên cứu nguyên lý hoạt động cơ bản của hệ thống điều hòa không khí 1 cấp, làm cơ sở cho việc thiết kế và xây dựng mô hình.</p>
+        </div>
+    </div>
+
+    <div class="card obj" data-aos="fade-up" data-aos-delay="60">
+        <div class="obj-icon">⚙️</div>
+        <div>
+            <h4>Tích hợp PLC và IoT</h4>
+            <p>Thiết kế và tích hợp bộ điều khiển PLC cùng cổng IoT nhằm giám sát, điều khiển và quản lý hệ thống từ xa theo thời gian thực.</p>
+        </div>
+    </div>
+
+    <div class="card obj" data-aos="fade-up" data-aos-delay="120">
+        <div class="obj-icon">🏗️</div>
+        <div>
+            <h4>Xây dựng mô hình thực nghiệm</h4>
+            <p>Xây dựng mô hình điều hòa không khí 1 cấp tích hợp các cảm biến và hệ thống điều khiển thông minh phục vụ nghiên cứu và thử nghiệm.</p>
+        </div>
+    </div>
+
+    <div class="card obj" data-aos="fade-up" data-aos-delay="180">
+        <div class="obj-icon">📊</div>
+        <div>
+            <h4>Đánh giá hiệu quả hoạt động</h4>
+            <p>Thực nghiệm, đo lường và đánh giá khả năng giám sát, điều khiển cũng như hiệu quả vận hành của mô hình.</p>
+        </div>
+    </div>
+
+    <div class="card obj" data-aos="fade-up" data-aos-delay="240">
+        <div class="obj-icon">💡</div>
+        <div>
+            <h4 class="center-title">Đề xuất hướng phát triển</h4>
+            <p>Đề xuất các giải pháp cải tiến và khả năng ứng dụng mô hình trong thực tế nhằm nâng cao hiệu quả vận hành và tiết kiệm năng lượng.</p>
+        </div>
+    </div>
+
+</div>
+</div>
+</section>
+
+<section id="kien-truc">
+<div class="container">
+<div class="sec-head" data-aos="fade-up"><div class="tag">KIẾN TRÚC</div><h2>Sơ đồ &amp; thành phần hệ thống</h2><p>Luồng dữ liệu từ cảm biến đến người dùng</p></div>
+<div class="architecture">
+
+<svg class="iot-svg" viewBox="0 0 1200 760">
+
+<defs>
+
+<linearGradient id="lineBlue" x1="0%" y1="0%" x2="100%" y2="0%">
+    <stop offset="0%" stop-color="#38bdf8"/>
+    <stop offset="100%" stop-color="#2563eb"/>
+</linearGradient>
+
+<filter id="shadow">
+    <feDropShadow dx="0" dy="8" stdDeviation="8"
+        flood-color="#000" flood-opacity=".25"/>
+</filter>
+
+<marker id="arrow"
+    viewBox="0 0 10 10"
+    refX="8"
+    refY="5"
+    markerWidth="6"
+    markerHeight="6"
+    orient="auto">
+
+    <path d="M0 0 L10 5 L0 10 Z" fill="#38bdf8"/>
+
+</marker>
+
+</defs>
+
+<!--==========================
+        ĐƯỜNG NỐI
+===========================-->
+<<path
+	d="M330 100
+       C380 70 450 70 500 100"
+	stroke="#38bdf8"
+    stroke-width="4"
+    stroke-dasharray="12 8"
+    marker-end="url(#arrow)"
+    class="svg-line"/>
+<!-- Website  -->
+<path
+    d="M900 70
+       C820 50 760 50 700 70"
+    fill="none"
+    stroke="#38bdf8"
+    stroke-width="4"
+    stroke-dasharray="12 8"
+    marker-end="url(#arrow)"
+    class="svg-line"/>
+
+<!-- Firebase -> ESP32 -->
+	<path
+	d="M600 150
+       C580 180 580 220 580 250"
+	fill="none"
+	stroke="#F50505"
+	stroke-width="4"
+	stroke-dasharray="12 8"
+	marker-end="url(#arrow)"
+	class="svg-line"/>
+<!-- ESP32->Firebase -->
+	<path
+    d="M620 250
+       C630 220 630 180 620 150"
+    fill="none"
+    stroke="#38bdf8"
+    stroke-width="4"
+    stroke-dasharray="12 8"
+    marker-end="url(#arrow)"
+    class="svg-line"/>
+<!-- Firebase -> Website -->
+	<path
+	d="M700 95
+       C760 60 840 60 900 95"
+	stroke="#38bdf8"
+    stroke-width="4"
+    stroke-dasharray="12 8"
+    marker-end="url(#arrow)"
+    class="svg-line"/>
+
+<!-- ESP32 -> Sensor -->
+	<path
+    d="M300 450
+       C360 360 420 320 480 295"
+    fill="none"
+    stroke="#38bdf8"
+    stroke-width="4"
+    stroke-dasharray="12 8"
+    marker-end="url(#arrow)"
+    class="svg-line"/>
+
+<!-- ESP32 -> PLC -->
+	<path
+	d="M720 295
+	C780 320 820 360 860 450"
+	stroke="#38bdf8"
+	fill="none"
+    stroke-width="4"
+    stroke-dasharray="12 8"
+    marker-end="url(#arrow)"
+    class="svg-line"/>
+    <!-- PLC ->  -->
+<path
+    d="M840 450
+       C790 390 750 340 700 295"
+    fill="none"
+    stroke="#38bdf8"
+    stroke-width="4"
+    stroke-dasharray="12 8"
+    marker-end="url(#arrow)"
+    class="svg-line"/>
+<!-- PLC -> Thiết bị -->
+	<path
+	d="M860 560
+       C850 585 850 615 850 640"
+	stroke="#38bdf8"
+	fill="none"
+    stroke-width="4"
+    stroke-dasharray="12 8"
+    marker-end="url(#arrow)"
+    class="svg-line"/>
+
+<!--==========================
+        FIREBASE
+===========================-->
+
+<g class="node esp">
+
+<rect x="90" y="50" width="240" height="100" rx="22"/>
+
+<text x="210" y="92">
+⚡ESP32 Energy
+</text>
+
+<text x="210" y="122" class="sub">
+Energy Node
+</text>
+
+</g>
+
+<g class="node firebase">
+
+<rect x="500" y="50" width="200" height="100" rx="22"/>
+
+<text x="600" y="92">☁ Firebase</text>
+
+<text x="600" y="122" class="sub">
+Realtime Database
+</text>
+
+</g>
+
+<!--==========================
+        WEBSITE
+===========================-->
+
+<g class="node web">
+
+<rect x="900" y="45" width="240" height="100" rx="22"/>
+
+<text x="1020" y="100">
+📱 Android App
+</text>
+
+<text x="1020" y="122" class="sub">
+
+</text>
+
+</g>
+
+<!--==========================
+        ESP32
+===========================-->
+
+<g class="node esp">
+
+<rect x="480" y="250" width="240" height="100" rx="22"/>
+
+<text x="600" y="292">
+📡 ESP32
+</text>
+
+<text x="600" y="322" class="sub">
+IoT Gateway
+</text>
+
+</g>
+
+<!--==========================
+        SENSOR
+===========================-->
+
+<g class="node sensor">
+
+<rect x="160" y="450" width="280" height="120" rx="22"/>
+
+<text x="300" y="492">
+🌡 Cảm biến
+</text>
+
+<text x="300" y="522" class="sub">
+ENS160,Ds18b20,
+</text>
+
+<text x="300" y="548" class="sub">
+SCT013,GP2Y1010AU0F
+</text>
+
+</g>
+
+<!--==========================
+        PLC
+===========================-->
+
+<g class="node plc">
+
+<rect x="740" y="450" width="240" height="100" rx="22"/>
+
+<text x="860" y="492">
+⚙ PLC Xinje
+</text>
+
+<text x="860" y="522" class="sub">
+XD3-24T-E
+</text>
+
+</g>
+
+<!--==========================
+      THIẾT BỊ
+===========================-->
+
+<g class="node act">
+
+<rect x="700" y="640" width="320" height="90" rx="22"/>
+
+<text x="860" y="678">
+❄ Thiết bị điều khiển
+</text>
+
+<text x="860" y="705" class="sub">
+Máy nén,Quạt,Cửa gió
+</text>
+
+</g>
+
+</svg>
+
+</div>
+<div class="comp-grid" data-aos="fade-up" data-aos-delay="80">
+<div class="comp"><div class="emoji">🌡️</div><h4>Cảm biến nhiệt</h4><p>Theo dõi môi trường</p></div>
+<div class="comp"><div class="emoji">💧</div><h4>Cảm biến độ ẩm</h4><p>Đo độ ẩm không khí</p></div>
+<div class="comp"><div class="emoji">🌬️</div><h4>Chất lượng KK</h4><p>Giám sát không khí</p></div>
+<div class="comp"><div class="emoji">⚡</div><h4>Giám sát điện năng</h4><p>Tiêu thụ điện</p></div>
+<div class="comp"><div class="emoji">📡</div><h4>ESP32 Gateway</h4><p>Cầu nối IoT</p></div>
+<div class="comp"><div class="emoji">⚙️</div><h4>PLC Xinje</h4><p>Bộ điều khiển</p></div>
+</div>
+</div>
+</section>
+
+<!-- <section id="video" style="background:var(--card)">
+<div class="container">
+<div class="sec-head" data-aos="fade-up"><div class="tag">DEMO</div><h2>Video demo hệ thống</h2><p>Video Youtube</p></div>
+<div class="video-wrap" data-aos="zoom-in"> -->
+<!-- Bỏ comment dòng iframe và xóa placeholder khi có video:
+<iframe src="https://www.youtube.com/embed/YOUR_VIDEO_ID" allowfullscreen allow="accelerometer;autoplay;clipboard-write;encrypted-media;gyroscope;picture-in-picture" style="width:100%;height:100%;border:0"></iframe>
+-->
+<!-- <div class="video-placeholder">
+<div class="play">▶</div>
+<h3>Video demo hệ thống</h3>
+<p style="opacity:.85;max-width:340px">Khi có video YouTube</p>
+</div>
+</div>
+</div>
+</section> -->
+
+<section id="hinh-anh">
+<div class="container">
+<div class="sec-head" data-aos="fade-up"><div class="tag">HÌNH ẢNH</div><h2>Gallery mô hình</h2><p>Click để phóng to</p></div>
+<div class="gallery" data-aos="fade-up"><div class="gal-item" onclick="openLightbox(this)"><img src="tongthe.jpg" alt="Mô hình tổng thể">
+	<div class="gal-overlay">Mô hình tổng thể</div>
+</div>
+<div class="gallery" data-aos="fade-up"><div class="gal-item" onclick="openLightbox(this)"><img src="tudien.jpg" alt="Bên ngoài tủ điều khiển">
+	<div class="gal-overlay">Tủ điều khiển</div>
+</div>
+<div class="gallery" data-aos="fade-up"><div class="gal-item" onclick="openLightbox(this)"><img src="bentrong.jpg" alt="Bộ điều khiển">
+	<div class="gal-overlay">Bộ điều khiển</div>
+</div>	
+</div>
+</div>
+</section>
+
+<section id="tien-do" style="background:var(--card)">
+<div class="container">
+<div class="sec-head" data-aos="fade-up"><div class="tag">TIẾN ĐỘ</div><h2>Timeline thực hiện đề tài</h2></div>
+<div class="timeline" data-aos="fade-up">
+<div class="tl-item"><div class="tl-date">T9–T10 / 2025</div><h4>Nghiên cứu &amp; thiết kế</h4><p>Khảo sát HVAC, chọn cảm biến, thiết kế sơ đồ khối, kế hoạch phần cứng.</p></div>
+<div class="tl-item"><div class="tl-date">T11–T12 / 2025</div><h4>Lắp ráp phần cứng</h4><p>Lắp ESP32, PLC, relay, cảm biến, dàn lạnh/nóng, máy nén trên mô hình.</p></div>
+<div class="tl-item"><div class="tl-date">T1–T2 / 2026</div><h4>Lập trình &amp; kết nối IoT</h4><p>Lập trình ESP32, Modbus RTU, Firebase, Web Dashboard &amp; App Android.</p></div>
+<div class="tl-item"><div class="tl-date">T3–T4 / 2026</div><h4>Thử nghiệm &amp; tối ưu</h4><p>Hiệu chỉnh Auto, kiểm tra ổn định, đo tiêu thụ điện, hoàn thiện giao diện.</p></div>
+<div class="tl-item"><div class="tl-date">T5–T6 / 2026</div><h4>Báo cáo &amp; bảo vệ</h4><p>Viết báo cáo, làm poster, demo hội nghị NCKH sinh viên.</p></div>
+</div>
+</div>
+</section>
+
+<section id="ket-qua">
+<div class="container">
+<div class="sec-head" data-aos="fade-up"><div class="tag">KẾT QUẢ NGHIÊN CỨU</div><h2>Công nghệ &amp; kết quả đạt được</h2>
+<p>Dựa trên thực nghiệm mô hình điều hòa không khí tích hợp PLC – ESP32 – IoT (Báo cáo tổng kết 7/2026)</p></div>
+<div class="tech-grid" data-aos="fade-up">
+<div class="tech"><div class="icon">📟</div><h4>ESP32</h4><p style="font-size:.75rem;color:var(--tl);margin-top:.25rem">Thu thập cảm biến · IoT</p></div>
+<div class="tech"><div class="icon">⚙️</div><h4>PLC Xinje</h4><p style="font-size:.75rem;color:var(--tl);margin-top:.25rem">Điều khiển tải công suất</p></div>
+<div class="tech"><div class="icon">🔌</div><h4>Modbus RTU</h4><p style="font-size:.75rem;color:var(--tl);margin-top:.25rem">Tỷ lệ thành công 96,68%</p></div>
+<div class="tech"><div class="icon">☁️</div><h4>Firebase</h4><p style="font-size:.75rem;color:var(--tl);margin-top:.25rem">Truyền 100% · trễ TB 188 ms</p></div>
+<div class="tech"><div class="icon">📱</div><h4>App Android</h4><p style="font-size:.75rem;color:var(--tl);margin-top:.25rem">Giám sát · điều khiển · bảo trì</p></div>
+<div class="tech"><div class="icon">📈</div><h4>Health Index</h4><p style="font-size:.75rem;color:var(--tl);margin-top:.25rem">Cảnh báo bảo trì dự đoán</p></div>
+</div>
+<div class="results-grid" data-aos="fade-up" data-aos-delay="60">
+<div class="result">
+<h4>🏗️ Mô hình thực nghiệm hoàn chỉnh</h4>
+<p>Xây dựng thành công hệ thống điều hòa tích hợp <strong>PLC (điều khiển cục bộ)</strong> và <strong>ESP32 (cổng IoT)</strong>, giao tiếp Modbus RTU/RS-485, đồng bộ dữ liệu thời gian thực lên Firebase. Kèm ứng dụng Android: đăng nhập, Manual/Auto, giám sát điện năng, cảnh báo bảo trì theo Health Index.</p>
+</div>
+<div class="result">
+<h4>🌡️ Giám sát môi trường &amp; ΔT</h4>
+<p>Nhiệt độ phòng giảm từ ~27°C xuống <strong>23–24°C</strong> sau khoảng 10 phút. Chênh lệch nhiệt trước/sau dàn lạnh <strong>ΔT ổn định 8–12°C</strong> — phù hợp khuyến nghị vận hành, chứng tỏ trao đổi nhiệt hiệu quả, chưa có dấu hiệu bám bẩn hay thiếu môi chất.</p>
+</div>
+<div class="result">
+<h4>🩺 Health Index &amp; bảo trì dự đoán</h4>
+<p>Đề xuất thang HI: <strong>80–100 Tốt</strong> · <strong>60–80 Trung bình</strong> · <strong>&lt;60 Kém</strong>. Vận hành bình thường HI đạt ~95. Khi mô phỏng suy giảm lưu lượng gió, HI xuống dưới 60 → tự động cảnh báo trên App Android (loại trừ cảnh báo giả giai đoạn khởi động &lt;5 phút).</p>
+</div>
+<div class="result">
+<h4>📡 Truyền thông ổn định</h4>
+<p><strong>Modbus RTU</strong> (60 phút, 3.229 yêu cầu): tỷ lệ thành công <strong>96,68%</strong>. <strong>ESP32 → Firebase</strong> (90 phút, chu kỳ 10s): <strong>100%</strong> thành công, độ trễ trung bình <strong>187,63 ms</strong>. Đồng bộ App realtime 100%.</p>
+</div>
+</div>
+
+<div class="results-grid" data-aos="fade-up" data-aos-delay="100" style="margin-top:1.2rem">
+<div class="result">
+<h4>⚡ Giám sát điện năng (PZEM)</h4>
+<p>Phản ánh đúng tải: dừng ~25 W · chỉ quạt ~60 W · máy nén + quạt ~260 W. Đỉnh khởi động ~370 W (≈1,4× công suất ổn định). Hiển thị đầy đủ U, I, P, PF, f, kWh trên Android và màn TFT.</p>
+</div>
+<div class="result">
+<h4>💡 Giá trị khoa học &amp; ứng dụng</h4>
+<p>Chứng minh tính khả thi kết hợp PLC + IoT cho HVAC quy mô nhỏ. Sản phẩm: (1) mô hình phần cứng PLC–ESP32–IoT, (2) App Android, (3) bộ dữ liệu thực nghiệm. Phù hợp giảng dạy, lab, văn phòng nhỏ; nền tảng mở rộng AI / BMS.</p>
+</div>
+</div>
+
+<div style="margin-top:2.2rem" data-aos="fade-up">
+<h3 style="text-align:center;margin-bottom:1rem;font-size:1.15rem">Thông số &amp; chỉ số thực nghiệm chính</h3>
+<table>
+<tr><th>Kiến trúc</th><td>PLC Xinje + ESP32 Gateway (+ ESP32 đo điện năng phân tán)</td></tr>
+<tr><th>Giao tiếp</th><td>Modbus RTU/RS-485 · WiFi · Firebase Realtime DB · BLE cấu hình WiFi</td></tr>
+<tr><th>Cảm biến</th><td>DS18B20 (ΔT) · ENS160 (KK) · SHT20 (ẩm) · GP2Y1010AU0F (bụi) · PZEM (điện)</td></tr>
+<tr><th>Modbus RTU</th><td>96,68% thành công (3.229 yêu cầu / 60 phút, chu kỳ 0,5 s)</td></tr>
+<tr><th>Firebase</th><td>100% thành công · độ trễ TB 187,63 ms (chu kỳ gửi 10 s)</td></tr>
+<tr><th>ΔT dàn lạnh</th><td>Ổn định 8–12°C sau giai đoạn khởi động</td></tr>
+<tr><th>Health Index</th><td>Vận hành tốt ~95 · ngưỡng cảnh bảo trì HI &lt; 60</td></tr>
+<tr><th>Công suất ổn định</th><td>~260–270 W (máy nén + quạt) · đỉnh khởi động ~370 W</td></tr>
+</table>
+</div>
+</div>
+</section>
+
+<section id="nhom" style="background:var(--card)">
+<div class="container">
+<div class="sec-head" data-aos="fade-up"><div class="tag">ĐỘI NGŨ</div><h2>Thành viên &amp; Giảng viên hướng dẫn</h2></div>
+<div class="team-grid" data-aos="fade-up">
+<div class="team-card"><div class="avatar"><img src="HVT.png" alt="ThayThong"></div><h4>Ths. Hồ Việt Thống</h4><div class="role">Giảng viên hướng dẫn</div><p>Khoa Điện – Điện tử</p></div>
+<div class="team-card"><div class="avatar"><img src="CNDD2211004.JPG" alt="Sang"></div><h4>Huỳnh Ngọc Sang</h4><div class="role">Chủ nhiệm đề tài</div><p>Sinh viên Khoa Điện – Điện tử</p></div>
+<div class="team-card"><div class="avatar"><img src="TKD.jpg" alt="Dang"></div><h4>Trần Khánh Đăng</h4><div class="role">Thành viên</div><p>Sinh viên Khoa Điện – Điện tử</p></div>
+</div>
+</div>
+</div>
+</section>
+
+<section id="an-toan">
+<div class="container">
+<div class="warning" data-aos="fade-up">
+<div style="font-size:1.5rem">⚡</div>
+<div>
+<h4>Cảnh báo an toàn</h4>
+<ul>
+<li>⚡ Nguy hiểm điện giật</li>
+<li>🤚 Không chạm khi đang hoạt động</li>
+<li>🔄 Tránh tiếp xúc với quạt và các bộ phận chuyển động</li>
+<li>👷 Chỉ người được hướng dẫn vận hành</li>
+</ul>
+</div>
+</div>
+</div>
+</section>
+</main>
+
+<footer>
+<h3>Trường Đại học Kỹ thuật – Công nghệ Cần Thơ (CTUET)</h3>
+<p>Khoa Điện – Điện tử · Đề tài NCKH Sinh viên</p>
+<p>Năm thực hiện: <strong>2025 – 2026</strong></p>
+<div class="copy">© 2025–2026 · Website giới thiệu đề tài NCKH · Smart HVAC IoT</div>
+</footer>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:50});
+const themeBtn=document.getElementById('themeBtn');
+const root=document.documentElement;
+const saved=localStorage.getItem('theme');
+if(saved){root.setAttribute('data-theme',saved);themeBtn.textContent=saved==='dark'?'☀️':'🌙'}
+themeBtn.onclick=()=>{const n=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',n);localStorage.setItem('theme',n);themeBtn.textContent=n==='dark'?'☀️':'🌙'};
+document.getElementById('menuBtn').onclick=()=>document.getElementById('navLinks').classList.toggle('open');
+const secs=document.querySelectorAll('section[id]');
+const navs=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(scrollY>=s.offsetTop-110)c=s.id});navs.forEach(a=>{a.classList.remove('active');if(a.getAttribute('href')==='#'+c)a.classList.add('active')})});
+function animateCounters(){document.querySelectorAll('.counting').forEach(el=>{const t=+el.dataset.target,d=1100,s=performance.now();(function tick(n){const p=Math.min((n-s)/d,1);el.textContent=Math.floor(p*t);if(p<1)requestAnimationFrame(tick);else el.textContent=t})(s)})}
+let done=false;const ob=new IntersectionObserver(e=>{if(e[0].isIntersecting&&!done){done=true;animateCounters()}},{threshold:.4});
+const hs=document.querySelector('.hero-stats');if(hs)ob.observe(hs);
+</script>
+</body>
+</html>
+</main>
+
+<script src="https://unpkg.com/aos@2.3.4/dist/aos.js"></script>
+<script>
+AOS.init({duration:700,once:true,offset:50});
+const themeBtn=document.getElementById('themeBtn');
+const root=document.documentElement;
+const saved=localStorage.getItem('theme');
+if(saved){root.setAttribute('data-theme',saved);themeBtn.textContent=saved==='dark'?'☀️':'🌙'}
+themeBtn.onclick=()=>{const n=root.getAttribute('data-theme')==='dark'?'light':'dark';root.setAttribute('data-theme',n);localStorage.setItem('theme',n);themeBtn.textContent=n==='dark'?'☀️':'🌙'};
+document.getElementById('menuBtn').onclick=()=>document.getElementById('navLinks').classList.toggle('open');
+const secs=document.querySelectorAll('section[id]');
+const navs=document.querySelectorAll('.nav-links a');
+window.addEventListener('scroll',()=>{let c='';secs.forEach(s=>{if(scrollY>=s.offsetTop-110)c=s.id});navs.forEach(a=>{a.classList.remove('active');if(a.getAttribute('href')==='#'+c)a.classList.add('active')})});
+function animateCounters(){document.querySelectorAll('.counting').forEach(el=>{const t=+el.dataset.target,d=1100,s=performance.now();(function tick(n){const p=Math.min((n-s)/d,1);el.textContent=Math.floor(p*t);if(p<1)requestAnimationFrame(tick);else el.textContent=t})(s)})}
+let done=false;const ob=new IntersectionObserver(e=>{if(e[0].isIntersecting&&!done){done=true;animateCounters()}},{threshold:.4});
+const hs=document.querySelector('.hero-stats');if(hs)ob.observe(hs);
+</script>
+</body>
+</html>
